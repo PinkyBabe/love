@@ -3,330 +3,418 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>our little world 🌸</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+<title>us</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --rose: #e8a0b0;
-    --blush: #f5d0d8;
-    --ivory: #fdf5f0;
+    --ink:     #0e1018;
+    --deep:    #111827;
+    --mid:     #1e2535;
+    --accent:  #7b9ccc;        /* muted steel-blue */
+    --accent2: #4f6d9a;        /* deeper slate-blue */
+    --mist:    rgba(123,156,204,0.12);
+    --text:    #c8d4e8;
+    --soft:    rgba(200,212,232,0.45);
+    --dim:     rgba(200,212,232,0.2);
   }
+
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Montserrat',sans-serif; background:#160810; min-height:100vh; overflow-x:hidden; }
 
-  .bg-layer {
+  html { scroll-behavior:smooth; }
+
+  body {
+    font-family:'DM Sans', sans-serif;
+    background: var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+    color: var(--text);
+  }
+
+  /* ── Background ── */
+  .bg {
     position:fixed; inset:0; z-index:0;
-    background: radial-gradient(ellipse at 15% 15%, rgba(180,60,100,0.22) 0%, transparent 55%),
-                radial-gradient(ellipse at 85% 85%, rgba(130,30,70,0.22) 0%, transparent 55%),
-                radial-gradient(ellipse at 50% 50%, rgba(90,10,40,0.13) 0%, transparent 65%);
-    background-color:#160810;
-    animation:bgPulse 10s ease-in-out infinite alternate;
-  }
-  @keyframes bgPulse {
-    0%  { filter:hue-rotate(0deg) brightness(1); }
-    100%{ filter:hue-rotate(12deg) brightness(1.07); }
+    background:
+      radial-gradient(ellipse at 10% 20%, rgba(60,90,160,0.14) 0%, transparent 52%),
+      radial-gradient(ellipse at 90% 80%, rgba(40,70,130,0.12) 0%, transparent 52%),
+      radial-gradient(ellipse at 55% 45%, rgba(20,40,90,0.08) 0%, transparent 60%);
+    background-color: var(--ink);
   }
 
-  .petals { position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
-  .petal { position:absolute; top:-30px; opacity:0; animation:fall linear infinite; user-select:none; }
-  @keyframes fall {
-    0%  { opacity:0;    transform:translateY(-30px) rotate(0deg); }
-    10% { opacity:0.55; }
-    90% { opacity:0.3;  }
-    100%{ opacity:0;    transform:translateY(110vh) rotate(420deg) translateX(55px); }
+  /* Subtle noise */
+  .noise {
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    opacity:0.028;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:200px;
   }
 
-  .grain {
-    position:fixed; inset:0; z-index:2; pointer-events:none; opacity:0.035;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size:160px;
+  /* Thin horizontal rule lines in bg for depth */
+  .grid-lines {
+    position:fixed; inset:0; z-index:1; pointer-events:none;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 79px,
+      rgba(123,156,204,0.04) 80px
+    );
   }
 
-  /* Header */
+  /* ── Floating petals — only flowers, kept warm ── */
+  .petals { position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+  .petal {
+    position:absolute; top:-20px; opacity:0;
+    animation:drift linear infinite; user-select:none; pointer-events:none;
+    font-size:14px;
+  }
+  @keyframes drift {
+    0%   { opacity:0;    transform:translateY(0) rotate(0deg) translateX(0px); }
+    8%   { opacity:0.5;  }
+    88%  { opacity:0.3;  }
+    100% { opacity:0;    transform:translateY(105vh) rotate(380deg) translateX(40px); }
+  }
+
+  /* ── Header ── */
   .header {
-    position:relative; z-index:10; text-align:center; padding:60px 20px 14px;
-    animation:fadeDown 1.4s ease both;
+    position:relative; z-index:10;
+    padding:72px 24px 24px;
+    display:flex; flex-direction:column; align-items:center;
+    animation:riseIn 1.2s cubic-bezier(0.22,1,0.36,1) both;
   }
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
-  .header .sub { font-size:0.6rem; font-weight:200; letter-spacing:0.46em; color:var(--rose); text-transform:uppercase; margin-bottom:12px; }
-  .header h1 {
-    font-family:'Cormorant Garamond',serif; font-weight:300; font-style:italic;
-    font-size:clamp(2.6rem,6vw,4.5rem); color:var(--ivory); letter-spacing:0.02em; line-height:1.1;
-    text-shadow:0 2px 50px rgba(232,160,176,0.35);
+  @keyframes riseIn {
+    from { opacity:0; transform:translateY(24px); }
+    to   { opacity:1; transform:translateY(0); }
   }
-  .divider { display:flex; align-items:center; justify-content:center; gap:12px; margin:16px auto; max-width:280px; }
-  .divider::before,.divider::after { content:''; flex:1; height:1px; background:linear-gradient(to right,transparent,var(--rose),transparent); }
-  .divider span { color:var(--rose); font-size:0.65rem; }
-  .love-note {
-    position:relative; z-index:10; text-align:center; padding:0 20px 36px;
-    color:rgba(245,208,216,0.5); font-family:'Cormorant Garamond',serif; font-style:italic;
-    font-size:clamp(0.9rem,2vw,1.1rem); letter-spacing:0.04em;
-    opacity:0; animation:fadeIn 2s ease both; animation-delay:0.7s;
-  }
-  @keyframes fadeIn { to{opacity:1} }
 
-  /* Gallery */
-  .gallery-section { position:relative; z-index:10; padding:0 0 130px; max-width:935px; margin:0 auto; }
-  .gallery-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; }
+  .eyebrow {
+    font-size:0.58rem; font-weight:300; letter-spacing:0.42em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:14px;
+    opacity:0.8;
+  }
 
-  .card { position:relative; aspect-ratio:1/1; overflow:hidden; cursor:pointer; opacity:0; animation:fadeIn .55s ease forwards; }
+  h1 {
+    font-family:'Playfair Display', serif;
+    font-weight:400; font-style:italic;
+    font-size:clamp(2.8rem, 6.5vw, 5rem);
+    color:#e8eef7;
+    letter-spacing:-0.01em;
+    line-height:1.05;
+    text-align:center;
+  }
+
+  .rule {
+    width:1px; height:40px;
+    background:linear-gradient(to bottom, transparent, var(--accent2), transparent);
+    margin:20px auto;
+    opacity:0.6;
+  }
+
+  .caption {
+    position:relative; z-index:10;
+    text-align:center;
+    font-size:0.72rem; font-weight:300; letter-spacing:0.1em;
+    color:var(--soft);
+    padding:0 24px 44px;
+    opacity:0;
+    animation:riseIn 1.6s cubic-bezier(0.22,1,0.36,1) both;
+    animation-delay:0.3s;
+  }
+
+  /* ── Gallery ── */
+  .gallery {
+    position:relative; z-index:10;
+    max-width:960px; margin:0 auto;
+    padding:0 0 140px;
+  }
+
+  .grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:2px;
+  }
+
+  .card {
+    position:relative; aspect-ratio:1/1; overflow:hidden; cursor:pointer;
+    opacity:0; animation:fadeUp 0.5s ease both;
+    background:var(--mid);
+  }
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(10px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
   .card img {
     width:100%; height:100%; object-fit:cover; display:block;
-    transition:transform .5s cubic-bezier(.25,.46,.45,.94), filter .5s ease;
-    filter:saturate(.88) brightness(.92);
+    transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.5s ease;
+    filter:saturate(0.82) brightness(0.9) contrast(1.04);
+    will-change:transform;
   }
-  .card:hover img { transform:scale(1.08); filter:saturate(1.08) brightness(1.04); }
-  .card-overlay { position:absolute; inset:0; background:rgba(120,30,60,0); transition:background .35s ease; }
-  .card:hover .card-overlay { background:rgba(120,30,60,0.2); }
+  .card:hover img {
+    transform:scale(1.06);
+    filter:saturate(0.95) brightness(1.0) contrast(1.02);
+  }
 
-  /* heart on hover */
-  .card-heart {
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-size:1.8rem; opacity:0; transition:opacity .3s ease; pointer-events:none;
-    text-shadow:0 2px 12px rgba(0,0,0,0.5);
+  /* Subtle blue tint overlay on hover */
+  .card::after {
+    content:'';
+    position:absolute; inset:0;
+    background:rgba(60,90,160,0);
+    transition:background 0.4s ease;
+    pointer-events:none;
   }
-  .card:hover .card-heart { opacity:0.85; }
+  .card:hover::after {
+    background:rgba(60,90,160,0.12);
+  }
 
   .status {
-    grid-column:1/-1; text-align:center; padding:60px 24px;
-    color:var(--rose); font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.2rem; opacity:.7; letter-spacing:.04em;
+    grid-column:1/-1; text-align:center; padding:70px 24px;
+    font-family:'Playfair Display', serif; font-style:italic;
+    font-size:1.05rem; color:var(--soft); letter-spacing:0.04em;
   }
-  .status::after { content:''; display:inline-block; width:4px; height:4px; border-radius:50%; background:var(--rose); margin-left:8px; vertical-align:middle; animation:blink 1.2s ease-in-out infinite; }
-  @keyframes blink { 0%,100%{opacity:.2;transform:translateY(0)} 50%{opacity:1;transform:translateY(-4px)} }
-  .status.error { color:#e8a0a0; font-size:.82rem; font-style:normal; opacity:1; line-height:2; }
-  .status.error::after { display:none; }
+  .status.error {
+    font-family:'DM Sans', sans-serif; font-style:normal;
+    font-size:0.78rem; line-height:2; color:rgba(200,212,232,0.55);
+  }
 
-  /* Lightbox */
+  /* ── Lightbox ── */
   .lightbox {
-    position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center;
-    background:rgba(8,2,5,0.96); backdrop-filter:blur(16px);
-    opacity:0; pointer-events:none; transition:opacity .3s ease;
+    position:fixed; inset:0; z-index:300;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(8,10,16,0.97);
+    backdrop-filter:blur(18px) saturate(0.6);
+    opacity:0; pointer-events:none;
+    transition:opacity 0.28s ease;
   }
-  .lightbox.active { opacity:1; pointer-events:all; }
-  .lightbox-inner { position:relative; display:flex; align-items:center; justify-content:center; }
+  .lightbox.open { opacity:1; pointer-events:all; }
+
+  .lb-wrap {
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+
   .lightbox img {
-    max-width:90vw; max-height:86vh; object-fit:contain; border-radius:6px;
-    box-shadow:0 30px 80px rgba(0,0,0,.85), 0 0 70px rgba(180,60,100,.2);
-    transform:scale(.93); transition:transform .3s ease;
+    max-width:88vw; max-height:84vh;
+    object-fit:contain; border-radius:3px;
+    box-shadow:0 40px 100px rgba(0,0,0,0.85);
+    transform:scale(0.95); transition:transform 0.3s cubic-bezier(0.22,1,0.36,1);
   }
-  .lightbox.active img { transform:scale(1); }
+  .lightbox.open img { transform:scale(1); }
+
   .lb-btn {
-    position:absolute; background:none; border:none; color:var(--blush); cursor:pointer;
-    opacity:.5; transition:opacity .2s, transform .2s; font-family:'Cormorant Garamond',serif; line-height:1;
+    position:absolute; background:none; border:none;
+    color:rgba(200,212,232,0.4); cursor:pointer;
+    transition:color 0.2s, transform 0.2s;
+    font-family:'Playfair Display', serif; line-height:1;
+    padding:8px;
   }
-  .lb-btn:hover { opacity:1; }
-  #lb-close { top:-48px; right:0; font-size:1.8rem; }
+  .lb-btn:hover { color:rgba(200,212,232,0.9); }
+
+  #lb-close { top:-46px; right:0; font-size:1.4rem; font-family:'DM Sans',sans-serif; font-weight:200; }
   #lb-close:hover { transform:rotate(90deg); }
-  #lb-prev { left:-56px; font-size:2.8rem; }
-  #lb-next { right:-56px; font-size:2.8rem; }
-  @media(max-width:620px){ #lb-prev{left:-36px} #lb-next{right:-36px} }
+  #lb-prev  { left:-64px; font-size:3rem; }
+  #lb-next  { right:-64px; font-size:3rem; }
 
-  /* Counter */
   .lb-counter {
-    position:absolute; bottom:-36px; left:50%; transform:translateX(-50%);
-    font-size:0.6rem; font-weight:300; letter-spacing:0.25em; color:rgba(245,208,216,0.45);
-    font-family:'Montserrat',sans-serif; white-space:nowrap;
+    position:absolute; bottom:-34px; left:50%; transform:translateX(-50%);
+    font-size:0.58rem; font-weight:300; letter-spacing:0.3em;
+    color:var(--dim); white-space:nowrap; font-family:'DM Sans',sans-serif;
   }
 
-  /* Music */
-  .music-bar {
-    position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:100;
-    display:flex; align-items:center; gap:12px;
-    background:rgba(22,8,16,0.9); border:1px solid rgba(232,160,176,0.2);
-    backdrop-filter:blur(20px); border-radius:50px; padding:12px 24px;
-    box-shadow:0 8px 40px rgba(0,0,0,.55), 0 0 30px rgba(180,60,100,.1);
-    animation:slideUp 1.8s ease both;
-    cursor:pointer; user-select:none;
+  @media(max-width:600px){
+    #lb-prev { left:-30px; font-size:2.2rem; }
+    #lb-next { right:-30px; font-size:2.2rem; }
   }
-  @keyframes slideUp {
-    from{opacity:0;transform:translateX(-50%) translateY(20px)}
-    to{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ── Music pill ── */
+  .music-pill {
+    position:fixed; bottom:26px; left:50%; transform:translateX(-50%);
+    z-index:200;
+    display:flex; align-items:center; gap:10px;
+    background:rgba(14,16,24,0.82);
+    border:1px solid rgba(123,156,204,0.15);
+    backdrop-filter:blur(24px);
+    border-radius:40px; padding:10px 22px;
+    box-shadow:0 8px 40px rgba(0,0,0,0.4);
+    animation:riseIn 2s ease both; animation-delay:0.5s;
+    cursor:default; user-select:none;
   }
-  .music-icon { font-size:15px; color:var(--rose); animation:pulse 2s ease-in-out infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.87)} }
-  .music-text { font-size:0.58rem; font-weight:300; letter-spacing:0.28em; color:var(--blush); text-transform:uppercase; }
+
+  .music-dot {
+    width:6px; height:6px; border-radius:50%;
+    background:var(--accent2);
+    animation:glow 2.4s ease-in-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes glow {
+    0%,100% { opacity:0.4; box-shadow:0 0 0 0 rgba(79,109,154,0); }
+    50%      { opacity:1;   box-shadow:0 0 8px 2px rgba(79,109,154,0.5); }
+  }
+
+  .music-label {
+    font-size:0.56rem; font-weight:300; letter-spacing:0.28em;
+    text-transform:uppercase; color:rgba(200,212,232,0.45);
+  }
 
   #yt-frame { display:none; width:0; height:0; }
 </style>
 </head>
 <body>
 
-<div class="bg-layer"></div>
+<div class="bg"></div>
+<div class="noise"></div>
+<div class="grid-lines"></div>
 <div class="petals" id="petals"></div>
-<div class="grain"></div>
 
-<!-- YouTube hidden autoplay -->
 <iframe id="yt-frame"
   src="https://www.youtube.com/embed/FcwJzTYcf5g?list=RDFcwJzTYcf5g&autoplay=1&loop=1&mute=0&controls=0&playsinline=1"
   allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-<!-- Header -->
 <header class="header">
-  <div class="sub">♡ for you, always</div>
-  <h1>our little world</h1>
-  <div class="divider"><span>✦</span></div>
+  <div class="eyebrow">a collection</div>
+  <h1>us</h1>
+  <div class="rule"></div>
 </header>
-<p class="love-note">every photo, a memory i never want to forget</p>
 
-<!-- Gallery -->
-<section class="gallery-section">
-  <div class="gallery-grid" id="grid">
-    <div class="status">gathering our memories</div>
+<p class="caption">moments worth keeping</p>
+
+<main class="gallery">
+  <div class="grid" id="grid">
+    <div class="status">loading…</div>
   </div>
-</section>
+</main>
 
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">
-  <div class="lightbox-inner">
+  <div class="lb-wrap">
     <button class="lb-btn" id="lb-close">✕</button>
     <button class="lb-btn" id="lb-prev">‹</button>
-    <img id="lb-img" src="" alt="our memory">
+    <img id="lb-img" src="" alt="">
     <button class="lb-btn" id="lb-next">›</button>
     <div class="lb-counter" id="lb-counter"></div>
   </div>
 </div>
 
-<!-- Music bar -->
-<div class="music-bar" title="our song ♡">
-  <span class="music-icon">♫</span>
-  <span class="music-text">playing our song</span>
+<!-- Music -->
+<div class="music-pill">
+  <div class="music-dot"></div>
+  <span class="music-label">now playing</span>
 </div>
 
 <script>
-  // ── Config (hardcoded — no setup needed) ─────────────────
   const FOLDER_ID = '19HBgsj-FzJeORd_NiWTR9Y0hFukYb_uR';
   const API_KEY   = 'AIzaSyAD_0iTfpXo3_85MXXRmV7OeIyHdFG5bss';
 
-  // ── Petals ───────────────────────────────────────────────
-  const PETALS = ['🌸','✿','❀','·','⁕','❋','꩜'];
+  // Petals — only flower emojis, kept warm
+  const FLOWERS = ['🌸','🌸','🌸','🌺','🌼','✿','❀'];
   const pc = document.getElementById('petals');
-  for (let i = 0; i < 26; i++) {
+  for (let i = 0; i < 18; i++) {
     const p = document.createElement('div');
     p.className = 'petal';
-    p.textContent = PETALS[Math.floor(Math.random() * PETALS.length)];
-    p.style.cssText = `left:${Math.random()*100}vw;font-size:${9+Math.random()*10}px;animation-duration:${9+Math.random()*15}s;animation-delay:${Math.random()*16}s;`;
+    p.textContent = FLOWERS[Math.floor(Math.random() * FLOWERS.length)];
+    const size = 10 + Math.random() * 8;
+    p.style.cssText = [
+      `left:${Math.random() * 100}vw`,
+      `font-size:${size}px`,
+      `animation-duration:${12 + Math.random() * 16}s`,
+      `animation-delay:${Math.random() * 18}s`,
+    ].join(';');
     pc.appendChild(p);
   }
 
-  // ── Helpers ──────────────────────────────────────────────
-  function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
+  // Shuffle
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+      [a[i], a[j]] = [a[j], a[i]];
     }
-    return arr;
+    return a;
   }
 
-  function thumbUrl(id) {
-    return `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
-  }
+  function thumb(id) { return `https://drive.google.com/thumbnail?id=${id}&sz=w900`; }
 
-  // ── State ────────────────────────────────────────────────
-  let photoIds    = [];
-  let currentIdx  = 0;
+  let ids = [], cur = 0;
 
-  // ── Load photos via Drive API ────────────────────────────
-  async function loadPhotos() {
+  async function load() {
     const grid = document.getElementById('grid');
-
     try {
-      const q      = encodeURIComponent(`'${FOLDER_ID}' in parents and trashed=false`);
-      const fields = encodeURIComponent('files(id,name,mimeType)');
-      const url    = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&pageSize=1000&key=${API_KEY}`;
-
-      const res  = await fetch(url);
-      const data = await res.json();
-
-      if (data.error) throw new Error(data.error.message);
-
-      const images = (data.files || []).filter(f => f.mimeType?.startsWith('image/'));
-      if (images.length === 0) {
-        grid.innerHTML = `<div class="status error">No images found in the folder yet.<br>Add photos to the Google Drive folder and refresh!</div>`;
+      const q = encodeURIComponent(`'${FOLDER_ID}' in parents and trashed=false`);
+      const f = encodeURIComponent('files(id,mimeType)');
+      const r = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=${f}&pageSize=1000&key=${API_KEY}`);
+      const d = await r.json();
+      if (d.error) throw new Error(d.error.message);
+      const imgs = (d.files || []).filter(f => f.mimeType?.startsWith('image/'));
+      if (!imgs.length) {
+        grid.innerHTML = `<div class="status">no photos yet — add some to the folder</div>`;
         return;
       }
-
-      photoIds = shuffle(images.map(f => f.id));
-      renderGrid();
-    } catch (err) {
-      grid.innerHTML = `<div class="status error">Couldn't load photos 😔<br>${err.message}</div>`;
-      console.error(err);
+      ids = shuffle(imgs.map(f => f.id));
+      render();
+    } catch(e) {
+      grid.innerHTML = `<div class="status error">${e.message}</div>`;
     }
   }
 
-  // ── Render ───────────────────────────────────────────────
-  function renderGrid() {
+  function render() {
     const grid = document.getElementById('grid');
     grid.innerHTML = '';
-
-    photoIds.forEach((id, i) => {
+    ids.forEach((id, i) => {
       const card = document.createElement('div');
       card.className = 'card';
-      card.style.animationDelay = `${i * 0.04}s`;
+      card.style.animationDelay = `${i * 0.035}s`;
 
-      const img    = document.createElement('img');
-      img.src      = thumbUrl(id);
-      img.alt      = 'our memory';
-      img.loading  = 'lazy';
-      img.onerror  = () => { card.style.display = 'none'; };
-
-      const ov     = document.createElement('div');
-      ov.className = 'card-overlay';
-
-      const heart  = document.createElement('div');
-      heart.className = 'card-heart';
-      heart.textContent = '♡';
+      const img = document.createElement('img');
+      img.src = thumb(id);
+      img.alt = '';
+      img.loading = 'lazy';
+      img.onerror = () => card.remove();
 
       card.appendChild(img);
-      card.appendChild(ov);
-      card.appendChild(heart);
-      card.addEventListener('click', () => openLightbox(i));
+      card.addEventListener('click', () => open(i));
       grid.appendChild(card);
     });
   }
 
-  // ── Lightbox ─────────────────────────────────────────────
-  const lb      = document.getElementById('lightbox');
-  const lbImg   = document.getElementById('lb-img');
-  const lbCount = document.getElementById('lb-counter');
+  // Lightbox
+  const lb    = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbCnt = document.getElementById('lb-counter');
 
-  function openLightbox(i) {
-    currentIdx  = i;
-    lbImg.src   = thumbUrl(photoIds[i]);
-    lbCount.textContent = `${i + 1} / ${photoIds.length}`;
-    lb.classList.add('active');
+  function open(i) {
+    cur = i;
+    lbImg.src = thumb(ids[i]);
+    lbCnt.textContent = `${i + 1} — ${ids.length}`;
+    lb.classList.add('open');
   }
 
-  function closeLightbox() { lb.classList.remove('active'); }
+  function close() { lb.classList.remove('open'); }
 
-  function lbGo(dir) {
-    currentIdx = (currentIdx + dir + photoIds.length) % photoIds.length;
-    lbImg.src  = thumbUrl(photoIds[currentIdx]);
-    lbCount.textContent = `${currentIdx + 1} / ${photoIds.length}`;
+  function go(d) {
+    cur = (cur + d + ids.length) % ids.length;
+    lbImg.src = thumb(ids[cur]);
+    lbCnt.textContent = `${cur + 1} — ${ids.length}`;
   }
 
-  document.getElementById('lb-close').onclick = closeLightbox;
-  document.getElementById('lb-next').onclick  = () => lbGo(1);
-  document.getElementById('lb-prev').onclick  = () => lbGo(-1);
-  lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+  document.getElementById('lb-close').onclick = close;
+  document.getElementById('lb-prev').onclick  = () => go(-1);
+  document.getElementById('lb-next').onclick  = () => go(1);
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+
   document.addEventListener('keydown', e => {
-    if (!lb.classList.contains('active')) return;
-    if (e.key === 'Escape')     closeLightbox();
-    if (e.key === 'ArrowRight') lbGo(1);
-    if (e.key === 'ArrowLeft')  lbGo(-1);
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape')     close();
+    if (e.key === 'ArrowRight') go(1);
+    if (e.key === 'ArrowLeft')  go(-1);
   });
 
-  // Touch swipe in lightbox
-  let touchX = null;
-  lb.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive:true });
-  lb.addEventListener('touchend', e => {
-    if (touchX === null) return;
-    const dx = e.changedTouches[0].clientX - touchX;
-    if (Math.abs(dx) > 50) lbGo(dx < 0 ? 1 : -1);
-    touchX = null;
+  let tx = null;
+  lb.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive:true });
+  lb.addEventListener('touchend',   e => {
+    if (tx === null) return;
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 48) go(dx < 0 ? 1 : -1);
+    tx = null;
   });
 
-  // ── Init ─────────────────────────────────────────────────
-  loadPhotos();
+  load();
 </script>
 </body>
 </html>
