@@ -254,7 +254,7 @@
     text-transform:uppercase; color:rgba(200,212,232,0.45);
   }
 
-  #yt-frame { display:none; width:0; height:0; }
+  #bg-audio { display:none; }
 </style>
 </head>
 <body>
@@ -264,12 +264,10 @@
 <div class="grid-lines"></div>
 <div class="petals" id="petals"></div>
 
-<iframe id="yt-frame"
-  src="https://www.youtube.com/embed/FcwJzTYcf5g?list=RDFcwJzTYcf5g&autoplay=1&loop=1&mute=0&controls=0&playsinline=1"
-  allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<audio id="bg-audio" src="balisong.mp3" autoplay loop preload="auto"></audio>
 
 <header class="header">
-  <div class="eyebrow">a collection of</div>
+  <div class="eyebrow">a collection</div>
   <h1>us</h1>
   <div class="rule"></div>
 </header>
@@ -417,4 +415,4 @@
   load();
 </script>
 </body>
-</html>
+  </html>
