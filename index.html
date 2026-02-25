@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>us</title>
+<title>a collection of us</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -255,6 +255,62 @@
   }
 
   #bg-audio { display:none; }
+
+  /* ── Splash screen ── */
+  #splash {
+    position:fixed; inset:0; z-index:999;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:var(--ink);
+    transition:opacity 0.9s ease;
+  }
+  #splash.fade-out { opacity:0; pointer-events:none; }
+
+  .splash-inner {
+    display:flex; flex-direction:column; align-items:center;
+    gap:24px; padding:24px; text-align:center;
+    animation:riseIn 1s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  .splash-flower {
+    font-size:2.2rem;
+    animation:sway 4s ease-in-out infinite;
+    display:block;
+  }
+  @keyframes sway {
+    0%,100% { transform:rotate(-6deg) scale(1); }
+    50%      { transform:rotate(6deg) scale(1.1); }
+  }
+
+  .splash-title {
+    font-family:'Playfair Display', serif;
+    font-weight:400; font-style:italic;
+    font-size:clamp(1.7rem, 4.5vw, 2.6rem);
+    color:#e8eef7; letter-spacing:0.01em; line-height:1.2;
+  }
+
+  .splash-sub {
+    font-size:0.63rem; font-weight:300; letter-spacing:0.2em;
+    color:var(--soft); text-transform:uppercase;
+    line-height:2; max-width:240px;
+  }
+
+  .splash-btn {
+    margin-top:10px; padding:13px 38px;
+    border:1px solid rgba(123,156,204,0.3); border-radius:40px;
+    background:transparent; color:var(--text);
+    font-family:'DM Sans', sans-serif; font-size:0.63rem;
+    font-weight:300; letter-spacing:0.3em; text-transform:uppercase;
+    cursor:pointer; transition:background 0.25s, border-color 0.25s, color 0.25s;
+  }
+  .splash-btn:hover {
+    background:rgba(123,156,204,0.08);
+    border-color:rgba(123,156,204,0.65);
+    color:#e8eef7;
+  }
+
+  /* hide main until splash dismissed */
+  #main-content { opacity:0; transition:opacity 0.8s ease 0.15s; }
+  #main-content.visible { opacity:1; }
 </style>
 </head>
 <body>
@@ -264,10 +320,23 @@
 <div class="grid-lines"></div>
 <div class="petals" id="petals"></div>
 
-<audio id="bg-audio" src="balisong.mp3" autoplay loop preload="auto"></audio>
+<audio id="bg-audio" src="balisong.mp3" loop preload="auto"></audio>
+
+<!-- Splash screen -->
+<div id="splash">
+  <div class="splash-inner">
+    <span class="splash-flower">🌸</span>
+    <div class="splash-title">a collection of us</div>
+    <div class="splash-sub">a few moments i never<br>want to forget</div>
+    <button class="splash-btn" id="enter-btn">open</button>
+  </div>
+</div>
+
+<!-- Main content (hidden until splash dismissed) -->
+<div id="main-content">
 
 <header class="header">
-  <div class="eyebrow">a collection</div>
+  <div class="eyebrow">a collection of</div>
   <h1>us</h1>
   <div class="rule"></div>
 </header>
@@ -279,6 +348,8 @@
     <div class="status">loading…</div>
   </div>
 </main>
+
+</div><!-- /#main-content -->
 
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">
@@ -412,7 +483,22 @@
     tx = null;
   });
 
-  load();
+  // Splash → enter
+  document.getElementById('enter-btn').addEventListener('click', () => {
+    const splash = document.getElementById('splash');
+    const main   = document.getElementById('main-content');
+    const audio  = document.getElementById('bg-audio');
+
+    audio.play().catch(() => {});
+
+    splash.classList.add('fade-out');
+    setTimeout(() => { splash.style.display = 'none'; }, 900);
+
+    main.classList.add('visible');
+    load();
+  });
+
+
 </script>
 </body>
-  </html>
+</html>
